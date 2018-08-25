@@ -1,48 +1,33 @@
-# crawler_weehui
-爬取漫小说(weehui)的漫画资源
+import requests
+import re
+from bs4 import BeautifulSoup
+import os
+# 全局session
+rq = requests.Session()
+# 文章id
+cartoon_id = None
 
-# 起因
 
-昨天看到这个漫画网站有个漫画挺有趣的.但是居然要收费才能看.
-然后找遍互联网找到这家可以看.
-但是需要收费三块钱一天,十块钱七天.
-不过每天晚上的19点到21点这个网站可以免费观看.
-但不是每个人都这在这个时候有空的啊.所有可以直接在这个时候通过这个小脚本自动下载所有的图片到自己的电脑上随便看
 
-##  使用过程
-
-1. 输入用户名
-2. 密码
-3. 漫画链接地址如(http://www.weehui.com/cartoon/index/d0de830142167fc4cff3a61d72faea02)
-4. 总话数(-.- 懒得写了.自己去看有几话.比如一共有57话,那么输入57)
-5. 漫画存放的地址(必须为文件夹)
-6. 等待下载完成.图片命名为 话数_第几张图片.jpg
-
-``` python
-# 用户名
-username = input('漫小说用户名:')
-# 密码
-password = input('漫小说密码:')
-# 漫画链接地址
-cartoonUrl = input('漫画链接地址:')
-# 漫画总章数
-cartoonPagesNum = input('漫画总章数(比如一共有57话,那么输入57)):')
-# 漫画存放的地址 "/Users/hdy/Desktop/pic/"
-save_url = input('漫画存放地址(必须为文件夹):')
-```
-
-## 分析了登录的请求
-很简单.毫无难度的登录.甚至连密码加密都没有...
-``` python
+# 登录
+def login(username, password, cartoonUrl):
+    pattern = re.compile(r'(\w*\d)')
+    id = pattern.search(cartoonUrl)
+    if id:
+        global cartoon_id
+        cartoon_id = id.group(0)
+        print('获取到的id为:'+cartoon_id)
         payload = {'name': username, 'password': password}
         headers = {'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
                    'Host': 'www.weehui.com', 'Origin': 'http://www.weehui.com', 'Referer': 'http://www.weehui.com/login/login'}
         r = rq.post('http://www.weehui.com/login/login',
                     data=payload, headers=headers)
-```
-## 然后遍历图片
-没有自动去分析漫画一共有几话.懒的写了.- -.
-```python
+        print(r)
+        get(1)
+    else:
+        print('no match')
+
+
 def get(index):
     print("正在下载第"+str(index)+'章内容..')
     global cartoon_id
@@ -75,4 +60,15 @@ def get(index):
     if(index < int(cartoonPagesNum)):
         get(index)
 
-```
+# 用户名
+username = input('漫小说用户名:')
+# 密码
+password = input('漫小说密码:')
+# 漫画链接地址
+cartoonUrl = input('漫画链接地址:')
+# 漫画总章数
+cartoonPagesNum = input('漫画总章数(比如一共有57话,那么输入57)):')
+# 漫画存放的地址 "/Users/hdy/Desktop/pic/"
+save_url = input('漫画存放地址(必须为文件夹):')
+# 开始下载
+login(username, password, cartoonUrl)
