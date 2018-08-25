@@ -11,7 +11,7 @@ cartoon_id = None
 
 # 登录
 def login(username, password, cartoonUrl):
-    pattern = re.compile(r'(\w*\d)')
+    pattern = re.compile(r'[a-z 0-9]{32}')
     id = pattern.search(cartoonUrl)
     if id:
         global cartoon_id
@@ -20,10 +20,10 @@ def login(username, password, cartoonUrl):
         payload = {'name': username, 'password': password}
         headers = {'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
                    'Host': 'www.weehui.com', 'Origin': 'http://www.weehui.com', 'Referer': 'http://www.weehui.com/login/login'}
-        r = rq.post('http://www.weehui.com/login/login',
+        rq.post('http://www.weehui.com/login/login',
                     data=payload, headers=headers)
-        print(r)
-        get(1)
+        global cartoonStartIndex
+        get(cartoonStartIndex)
     else:
         print('no match')
 
@@ -56,8 +56,8 @@ def get(index):
                  str(index)+"_"+str(i)+".jpg", 'wb').write(ir.content)
 
     index = index+1
-    global cartoonPagesNum
-    if(index < int(cartoonPagesNum)):
+    global cartoonEndIndex
+    if(index < cartoonEndIndex):
         get(index)
 
 # 用户名
@@ -70,5 +70,19 @@ cartoonUrl = input('漫画链接地址:')
 cartoonPagesNum = input('漫画总章数(比如一共有57话,那么输入57)):')
 # 漫画存放的地址 "/Users/hdy/Desktop/pic/"
 save_url = input('漫画存放地址(必须为文件夹):')
+# 第几话开始下载
+cartoonStartIndex = input('从第几话开始?如果不输入默认为1:')
+if(cartoonStartIndex):
+    cartoonStartIndex = int(cartoonStartIndex)
+else:
+    cartoonStartIndex = 1
+
+# 第几话结束
+cartoonEndIndex = input('从第几话结束?如果不输入默认为到底:')
+if(cartoonEndIndex):
+    cartoonEndIndex = int(cartoonEndIndex)
+else:
+    cartoonEndIndex = int(cartoonPagesNum)
+
 # 开始下载
 login(username, password, cartoonUrl)
