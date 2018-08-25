@@ -31,6 +31,10 @@ cartoonPagesNum = input('漫画总章数(比如一共有57话,那么输入57)):'
 save_url = input('漫画存放地址(必须为文件夹):')
 ```
 
+## 使用过程图片
+![下载中..](https://github.com/egdw/crawler_weehui/blob/master/show.jpg?raw=true)
+![下载完成..](https://github.com/egdw/crawler_weehui/blob/master/main2.png?raw=true)
+
 ## 分析了登录的请求
 很简单.毫无难度的登录.甚至连密码加密都没有...
 ``` python
