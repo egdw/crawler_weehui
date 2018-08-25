@@ -16,9 +16,12 @@
 3. 漫画链接地址如(http://www.weehui.com/cartoon/index/d0de830142167fc4cff3a61d72faea02)
 4. 总话数(-.- 懒得写了.自己去看有几话.比如一共有57话,那么输入57)
 5. 漫画存放的地址(必须为文件夹)
+6. 可选第几话开始下载
+7. 可选第几话结束卸载
 6. 等待下载完成.图片命名为 话数_第几张图片.jpg
 
 ``` python
+# 用户名
 # 用户名
 username = input('漫小说用户名:')
 # 密码
@@ -29,6 +32,22 @@ cartoonUrl = input('漫画链接地址:')
 cartoonPagesNum = input('漫画总章数(比如一共有57话,那么输入57)):')
 # 漫画存放的地址 "/Users/hdy/Desktop/pic/"
 save_url = input('漫画存放地址(必须为文件夹):')
+# 第几话开始下载
+cartoonStartIndex = input('从第几话开始?如果不输入默认为1:')
+if(cartoonStartIndex):
+    cartoonStartIndex = int(cartoonStartIndex)
+else:
+    cartoonStartIndex = 1
+
+# 第几话结束
+cartoonEndIndex = input('从第几话结束?如果不输入默认为到底:')
+if(cartoonEndIndex):
+    cartoonEndIndex = int(cartoonEndIndex)
+else:
+    cartoonEndIndex = int(cartoonPagesNum)
+
+# 开始下载
+login(username, password, cartoonUrl)
 ```
 
 ## 使用过程图片
