@@ -40,7 +40,7 @@ def get(index):
     div = soup.findAll('div', attrs={"class": 'contentNovel'})[0]
     # print(div)
     soup = BeautifulSoup(str(div), 'html5lib')
-    i = 0
+    i = index
     for src in soup.findAll("img"):
         data_original = src.get('data-original')
         if(data_original == None):
